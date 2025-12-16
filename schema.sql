@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type TEXT NOT NULL,
+    status TEXT NOT NULL,
+    s3_bucket TEXT NOT NULL,
+    s3_key TEXT NOT NULL,
+    payload_size INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP
+);

@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: pracapp-api
+    depends_on:
+      - redis
+    ports:
+      - "8000:8000"
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: pracapp-worker
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7
+    container_name: pracapp-redis
+  
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - AWS_DEFAULT_REGION=us-east-1

@@ -1,0 +1,80 @@
+pulse:
+  phases:
+    - phase: 1
+      name: Core Event Ingestion
+      goal: Build foundation for receiving and storing events
+      components:
+        - FastAPI API
+        - Events table in DB
+      tasks:
+        - Setup FastAPI project with /events endpoint
+        - Validate incoming events (payload, type, required fields)
+        - Store events in events table with status=pending
+      outcome: Can receive and persist events reliably
+      status: DONE
+
+    - phase: 2
+      name: Asynchronous Queue with Redis
+      goal: Decouple API and worker for reliable async processing
+      components:
+        - Redis Queue
+      tasks:
+        - Push event IDs to Redis after storing in DB
+        - Implement basic worker to consume event IDs
+        - Add logging for event consumption
+      outcome: Events are queued and processed asynchronously
+      status: TODO
+
+    - phase: 3
+      name: Worker Service & Processing
+      goal: Multi-step event processing
+      components:
+        - Worker Service
+        - Delivery table in DB
+      tasks:
+        - Consume event IDs from Redis
+        - Enrich payload (metadata, transformations)
+        - Forward events to external microservices (analytics, payment)
+        - Update delivery table: status, retries
+        - Retry failed events with exponential backoff
+        - Optional: Dead-letter queue for permanently failed events
+      outcome: Reliable, observable event processing with retries
+      status: TODO
+
+    - phase: 4
+      name: External Integrations
+      goal: Notifications and service integrations
+      components:
+        - Email service
+        - Webhooks / External APIs
+      tasks:
+        - Worker sends asynchronous emails/notifications
+        - Forward enriched events to other microservices or third-party webhooks
+        - Track success/failure in DB
+      outcome: Worker can interact with external systems effectively
+      status: TODO
+
+    - phase: 5
+      name: Observability & Production Readiness
+      goal: Make the system production-ready and scalable
+      components:
+        - Metrics
+        - Logging
+        - Multiple worker instances
+      tasks:
+        - Add metrics (processing time, retries, failures)
+        - Structured logging for debugging and monitoring
+        - Scale workers horizontally for high load
+        - Monitor dead-letter queue and retries
+      outcome: Reliable, scalable, production-grade backend
+      status: TODO
+
+  tech_stack:
+    api: FastAPI
+    queue: Redis # Kafka optional for large-scale
+    db: Postgres / DuckDB
+    worker: Python async worker
+    external_services:
+      - Email API
+      - Webhooks
+    optional: Docker Compose for containerization
